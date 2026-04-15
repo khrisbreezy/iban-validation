@@ -1,5 +1,5 @@
 {
-  "name": "iban-validation",
+  "name": "iban-validate",
   "version": "1.0.0",
   "description": "Comprehensive IBAN validator. Supports 116 country codes — all official ISO 13616 countries plus experimental African countries. Zero dependencies.",
   "keywords": [

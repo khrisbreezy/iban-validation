@@ -12,7 +12,7 @@ A comprehensive, **zero-dependency** IBAN validator for **TypeScript** and **Jav
 Built on the ISO 7064 MOD-97-10 algorithm and the official SWIFT IBAN registry, covering every country in the world that uses IBAN for banking transactions — from Germany and the UK to Saudi Arabia, Ivory Coast, and Brazil.
 
 ```ts
-import { isValid } from "iban-validation";
+import { isValid } from "iban-validate";
 
 isValid("DE89 3704 0044 0532 0130 00"); // true  ✓
 isValid("GB29 NWBK 6016 1331 9268 19"); // true  ✓
@@ -54,7 +54,7 @@ isValid("DE99 3704 0044 0532 0130 00"); // false ✗ bad checksum
   - [IbanCountryInfo](#ibancountryinfo)
   - [Other helpers](#other-helpers)
 - [Error handling patterns](#error-handling-patterns)
-- [How IBAN validation works](#how-iban-validation-works)
+- [How IBAN validate works](#how-iban-validate-works)
 - [Supported countries](#supported-countries)
 - [Contributing](#contributing)
 - [License](#license)
@@ -65,16 +65,16 @@ isValid("DE99 3704 0044 0532 0130 00"); // false ✗ bad checksum
 
 ```sh
 # npm
-npm install iban-validation
+npm install iban-validate
 
 # yarn
-yarn add iban-validation
+yarn add iban-validate
 
 # pnpm
-pnpm add iban-validation
+pnpm add iban-validate
 
 # bun
-bun add iban-validation
+bun add iban-validate
 ```
 
 ---
@@ -90,7 +90,7 @@ import {
   getSepaCountries,
   getExperimentalCountries,
   getExpectedLength,
-} from "iban-validation";
+} from "iban-validate";
 
 // ── Simple boolean check ───────────────────────────────────────────────────
 isValid("DE89 3704 0044 0532 0130 00"); // true  (spaces stripped automatically)
@@ -140,7 +140,7 @@ const len = getExpectedLength("NO"); // 15 (shortest IBAN in the world)
 #### Simple input validation
 
 ```tsx
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 import { useState } from "react";
 
 function IbanInput() {
@@ -181,7 +181,7 @@ function IbanInput() {
 
 ```tsx
 import { useForm } from "react-hook-form";
-import { isValid } from "iban-validation";
+import { isValid } from "iban-validate";
 
 type FormValues = { iban: string };
 
@@ -216,7 +216,7 @@ function PaymentForm() {
 
 ```ts
 import { z } from "zod";
-import { isValid } from "iban-validation";
+import { isValid } from "iban-validate";
 
 const paymentSchema = z.object({
   recipientName: z.string().min(2),
@@ -233,7 +233,7 @@ type Payment = z.infer<typeof paymentSchema>;
 #### Country-locked field (when you know the user's country)
 
 ```tsx
-import { validate, getCountryInfo } from "iban-validation";
+import { validate, getCountryInfo } from "iban-validate";
 
 function CountryLockedIbanField({ countryCode }: { countryCode: string }) {
   const info = getCountryInfo(countryCode);
@@ -269,7 +269,7 @@ function CountryLockedIbanField({ countryCode }: { countryCode: string }) {
 #### Displaying country info after successful validation
 
 ```tsx
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 function IbanResult({ iban }: { iban: string }) {
   const result = validate(iban);
@@ -306,7 +306,7 @@ function IbanResult({ iban }: { iban: string }) {
 ```ts
 // app/api/payments/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -336,7 +336,7 @@ export async function POST(req: NextRequest) {
 // app/actions/validateIban.ts
 "use server";
 
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 export async function validateIbanAction(formData: FormData) {
   const iban = formData.get("iban") as string;
@@ -360,7 +360,7 @@ export async function validateIbanAction(formData: FormData) {
 
 ```ts
 import express from "express";
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 const app = express();
 app.use(express.json());
@@ -398,7 +398,7 @@ app.post("/api/validate-iban", (req, res) => {
 ```vue
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 const iban = ref("");
 const result = computed(() =>
@@ -621,7 +621,7 @@ getExperimentalCountries().length; // 22
 ### Simple service function
 
 ```ts
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 // Returns null on success, error message on failure
 function validateBeneficiaryIban(iban: string, country: string): string | null {
@@ -633,7 +633,7 @@ function validateBeneficiaryIban(iban: string, country: string): string | null {
 ### Throwing on invalid input
 
 ```ts
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 function processPayment(iban: string) {
   const result = validate(iban);
@@ -648,7 +648,7 @@ function processPayment(iban: string) {
 ### Filtering a list of IBANs
 
 ```ts
-import { isValid } from "iban-validation";
+import { isValid } from "iban-validate";
 
 const ibans = [
   "DE89 3704 0044 0532 0130 00",
@@ -664,7 +664,7 @@ const invalid = ibans.filter((i) => !isValid(i));
 ### With async/await in a payment service
 
 ```ts
-import { validate } from "iban-validation";
+import { validate } from "iban-validate";
 
 async function submitPayment(payload: {
   iban: string;
@@ -702,7 +702,7 @@ async function submitPayment(payload: {
 ## CommonJS usage
 
 ```js
-const { isValid, validate, getCountryInfo } = require("iban-validation");
+const { isValid, validate, getCountryInfo } = require("iban-validate");
 
 console.log(isValid("DE89 3704 0044 0532 0130 00")); // true
 ```
